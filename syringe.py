@@ -7,6 +7,14 @@ A simple dependency injection library.
 import functools
 import logging
 
+try:
+    from unittest import mock
+except ImportError:
+    try:
+        import mock
+    except ImportError:
+        mock = None
+
 
 _PROVIDERS = {}
 
@@ -41,6 +49,12 @@ def provides(name):
         init = cls.__init__
 
         def __init__(self, *args, **kwargs):
+            if mock and isinstance(self, mock.Mock):
+                init(self, *args, **kwargs)
+                if name not in _PROVIDERS:
+                    _PROVIDERS[name] = self
+                    logging.info('Mocked [{}]: {}'.format(name, self))
+                return
             if name in _PROVIDERS:
                 raise DuplicateProviderError(
                     'A provider for [{}] already exists'.format(name))

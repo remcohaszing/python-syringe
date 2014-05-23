@@ -8,7 +8,7 @@ import unittest
 
 try:
     from unittest import mock
-except:
+except ImportError:
     import mock
 
 import syringe
@@ -24,16 +24,18 @@ class TestProvides(unittest.TestCase):
         Reset the :obj:`syringe._PROVIDERS` dict.
 
         """
-        syringe._PROVIDERS = {}
+        syringe._PROVIDERS.clear()
 
     def test_provide_one(self):
         """
         Test that the decorated class is added to the providers.
 
         """
-        cls = mock.Mock
-        syringe.provides('mock')(cls)
-        instance = cls()
+        @syringe.provides('mock')
+        class CLS(object):
+            pass
+
+        instance = CLS()
         self.assertIs(instance, syringe._PROVIDERS['mock'])
 
     def test_provide_duplicate(self):
@@ -42,11 +44,13 @@ class TestProvides(unittest.TestCase):
         :exc:`syringe.DuplicateProviderError`.
 
         """
-        cls = mock.Mock
-        syringe.provides('mock')(cls)
-        instance = cls()
+        @syringe.provides('mock')
+        class CLS(object):
+            pass
+
+        instance = CLS()
         with self.assertRaises(syringe.DuplicateProviderError) as e:
-            cls()
+            CLS()
         self.assertEqual('A provider for [mock] already exists',
                          e.exception.args[0])
 
@@ -56,10 +60,12 @@ class TestProvides(unittest.TestCase):
         the same name raises a :exc:`syringe.DuplicateProviderError`.
 
         """
-        class AMock(mock.Mock):
+        @syringe.provides('mock')
+        class AMock(object):
             pass
 
-        class BMock(mock.Mock):
+        @syringe.provides('mock')
+        class BMock(object):
             pass
 
         AMock()
@@ -82,7 +88,7 @@ class TestInject(unittest.TestCase):
         Reset the :obj:`syringe._PROVIDERS` dict.
 
         """
-        syringe._PROVIDERS = {}
+        syringe._PROVIDERS.clear()
 
     def test_no_candidate(self):
         """
@@ -107,3 +113,39 @@ class TestInject(unittest.TestCase):
         foo = Foo()
         dependant = self.Dependant()
         self.assertIs(foo, dependant.dependency)
+
+
+class TestMock(unittest.TestCase):
+    """
+    Test that mocks may be subclassed for easy mocking using syringe.
+
+    """
+    injected = syringe.inject('mock')
+
+    def setUp(self):
+        syringe._PROVIDERS.clear()
+
+        @syringe.provides('mock')
+        class SomeMock(mock.Mock):
+            pass
+
+        self.actual = SomeMock()
+
+    def test_same_instance(self):
+        """
+        Test that the injected mock is the actual mock instance.
+
+        """
+        self.assertIs(self.actual, self.injected)
+
+    def test_call_mock(self):
+        """
+        Test that the actual mock is called when calling the injected mock.
+
+        """
+        self.actual.ask.return_value = 42
+        answer = self.injected.ask(
+            'what is the answer to life the universe and everything?')
+        self.actual.ask.assert_called_once_with(
+            'what is the answer to life the universe and everything?')
+        self.assertEqual(42, answer)

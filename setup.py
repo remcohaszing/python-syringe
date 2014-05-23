@@ -6,9 +6,14 @@ from setuptools import setup
 try:
     from unittest import mock
 except:
-    tests_require = ['mock']
+    kwargs = {
+        'tests_require': 'mock',
+        'extras_require': {
+            'mock': 'mock'
+        }
+    }
 else:
-    tests_require = []
+    kwargs = {}
 
 
 with open('README.rst') as f:
@@ -26,5 +31,5 @@ setup(
     long_description=readme,
     py_modules=['syringe'],
     test_suite='tests',
-    tests_require=tests_require,
-    zip_safe=True)
+    zip_safe=True,
+    **kwargs)
