@@ -22,7 +22,7 @@ with open('README.rst') as f:
 
 setup(
     name='syringe',
-    version='0.1.0',
+    version='0.1.1',
     author='Remco Haszing',
     author_email='remcohaszing@gmail.com',
     url='https://github.com/remcohaszing/python-syringe',
