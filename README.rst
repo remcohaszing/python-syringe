@@ -2,6 +2,9 @@
 Syringe
 =======
 
+.. image:: https://travis-ci.org/remcohaszing/grunt-angular-templatecache.png?branch=master
+   :target: https://travis-ci.org/remcohaszing/python-audiolayer
+
 A simple dependency injection library.
 
 
