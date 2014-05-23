@@ -124,12 +124,7 @@ class TestMock(unittest.TestCase):
 
     def setUp(self):
         syringe._PROVIDERS.clear()
-
-        @syringe.provides('mock')
-        class SomeMock(mock.Mock):
-            pass
-
-        self.actual = SomeMock()
+        self.actual = syringe.provides('mock')(mock.Mock)()
 
     def test_same_instance(self):
         """
@@ -149,3 +144,32 @@ class TestMock(unittest.TestCase):
         self.actual.ask.assert_called_once_with(
             'what is the answer to life the universe and everything?')
         self.assertEqual(42, answer)
+
+
+class TestClear(unittest.TestCase):
+    """
+    Tests :func:`syringe.clear`.
+
+    """
+    def test_same_instance(self):
+        """
+        Test that the providers dict is still the same instance.
+
+        """
+        providers = syringe._PROVIDERS
+        syringe.clear()
+        self.assertIs(providers, syringe._PROVIDERS)
+
+    def test_empty(self):
+        """
+        Test that the providers dict is empty after clearing.
+
+        """
+        @syringe.provides('mock')
+        class CLS(object):
+            pass
+
+        CLS()
+        self.assertIn('mock', syringe._PROVIDERS)
+        syringe.clear()
+        self.assertDictEqual({}, syringe._PROVIDERS)

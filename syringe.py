@@ -98,3 +98,13 @@ def inject(name):
 
     """
     return Injector(name)
+
+
+def clear():
+    """
+    Clears all current providers.
+
+    This may be useful for testing.
+
+    """
+    _PROVIDERS.clear()
