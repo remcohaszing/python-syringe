@@ -5,7 +5,6 @@ A simple dependency injection library.
 
 """
 import functools
-import logging
 
 try:
     from unittest import mock
@@ -53,14 +52,12 @@ def provides(name):
                 init(self, *args, **kwargs)
                 if name not in _PROVIDERS:
                     _PROVIDERS[name] = self
-                    logging.info('Mocked [{}]: {}'.format(name, self))
                 return
             if name in _PROVIDERS:
                 raise DuplicateProviderError(
                     'A provider for [{}] already exists'.format(name))
             init(self, *args, **kwargs)
             _PROVIDERS[name] = self
-            logging.info('Injected [{}]: {}'.format(name, self))
 
         try:
             __init__ = functools.wraps(init)(__init__)
