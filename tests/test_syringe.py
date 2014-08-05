@@ -75,6 +75,42 @@ class TestProvides(unittest.TestCase):
                          e.exception.args[0])
 
 
+class TestGet(unittest.TestCase):
+    """
+    Tests :func:`syringe.get`.
+
+    """
+    def setUp(self):
+        """
+        Reset the :obj:`syringe._PROVIDERS` dict.
+
+        """
+        syringe._PROVIDERS.clear()
+
+    def test_get(self):
+        """
+        Test simply getting a provided instance.
+
+        """
+        @syringe.provides('mock')
+        class CLS(object):
+            pass
+
+        instance = CLS()
+        self.assertIs(instance, syringe.get('mock'))
+
+    def test_no_candidate(self):
+        """
+        Test that a :exc:`syringe.NoCandidateError` is raised when no
+        candidate exists.
+
+        """
+        with self.assertRaises(syringe.NoCandidateError) as e:
+            syringe.get('mock')
+        self.assertEqual('No provider found for [mock]', e.exception.args[0])
+
+
+
 class TestInject(unittest.TestCase):
     """
     Tests :func:`syringe.inject`.

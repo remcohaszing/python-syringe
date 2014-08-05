@@ -18,6 +18,7 @@ except ImportError:
 __all__ = [
     'clear',
     'DuplicateProviderError',
+    'get',
     'inject',
     'Injector',
     'mock',
@@ -75,6 +76,23 @@ def provides(name):
     return inner
 
 
+def get(name):
+    """
+    Returns the provided instance.
+
+    Args:
+        name: The lookup name.
+
+    Returns:
+        The provided instance.
+
+    """
+    if name not in _PROVIDERS:
+        raise NoCandidateError('No provider found for [{}]'.format(name))
+    return _PROVIDERS[name]
+
+
+
 class Injector(object):
     """
     Not to be used directly. Call :func:`inject` instead.
@@ -88,10 +106,7 @@ class Injector(object):
     def __get__(self, obj, value):
         if obj is None:
             return self
-        if self.name not in _PROVIDERS:
-            raise NoCandidateError(
-                'No provider found for [{}]'.format(self.name))
-        return _PROVIDERS[self.name]
+        return get(self.name)
 
 
 def inject(name):
