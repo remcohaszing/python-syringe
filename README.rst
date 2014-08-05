@@ -36,7 +36,7 @@ Next inject it in another class using ``inject('a lookup name')``.
 ...         self.cure.drink(self)
 ...
 
-When an instance of the ``Bee`` class is created, the value of the injecte name
+When an instance of the ``Person`` class is created, the value of the injecte name
 is the instance of the provided and instantiated class.
 
 >>> person = Person()
