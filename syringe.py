@@ -15,6 +15,17 @@ except ImportError:
         mock_module = None
 
 
+__all__ = [
+    'clear',
+    'DuplicateProviderError',
+    'inject',
+    'Injector',
+    'mock',
+    'provides',
+    'NoCandidateError'
+]
+
+
 _PROVIDERS = {}
 
 
