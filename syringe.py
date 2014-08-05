@@ -128,7 +128,7 @@ def mock(name, cls=None):
 
     """
     if cls is None:
-        cls = type(name, (mock_module.Mock,), {})
+        cls = type(str(name), (mock_module.Mock,), {})
     instance = cls()
     _PROVIDERS[name] = instance
     return instance
