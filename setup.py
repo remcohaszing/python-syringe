@@ -4,7 +4,7 @@
 from setuptools import setup
 
 try:
-    from unittest import mock
+    from unittest import mock  # noqa
 except:
     kwargs = {
         'tests_require': 'mock',
