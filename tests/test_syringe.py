@@ -124,26 +124,44 @@ class TestMock(unittest.TestCase):
 
     def setUp(self):
         syringe._PROVIDERS.clear()
-        self.actual = syringe.provides('mock')(mock.Mock)()
 
     def test_same_instance(self):
         """
         Test that the injected mock is the actual mock instance.
 
         """
-        self.assertIs(self.actual, self.injected)
+        m = syringe.mock('mock')
+        self.assertIs(m, self.injected)
 
     def test_call_mock(self):
         """
         Test that the actual mock is called when calling the injected mock.
 
         """
-        self.actual.ask.return_value = 42
+        m = syringe.mock('mock')
+        m.ask.return_value = 42
         answer = self.injected.ask(
             'what is the answer to life the universe and everything?')
-        self.actual.ask.assert_called_once_with(
+        m.ask.assert_called_once_with(
             'what is the answer to life the universe and everything?')
         self.assertEqual(42, answer)
+
+    def test_class_name(self):
+        """
+        Test that the class name matches the provider name.
+
+        """
+        m = syringe.mock('mock')
+        self.assertEqual('mock', type(m).__name__)
+
+    def test_mock_override(self):
+        """
+        Test that a mock overrides any other provided instance.
+
+        """
+        syringe.mock('mock')
+        m = syringe.mock('mock')
+        self.assertIs(m, self.injected)
 
 
 class TestClear(unittest.TestCase):

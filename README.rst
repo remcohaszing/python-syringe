@@ -47,6 +47,21 @@ Nom nom
 >>> assert person.health == 100
 
 
+Mocking
+-------
+
+A mock instance can be inserted using ``syringe.mock('a lookup name')``
+
+>>> try:
+...     from unittest import mock
+... except:
+...     import mock
+...
+>>> m = syringe.mock('cure')
+>>> person.drink_medicine()
+>>> m.drink.assert_called_once_with(person)
+
+
 Installing
 ==========
 
