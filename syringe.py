@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-
 """
 A simple dependency injection library.
 
@@ -90,7 +89,6 @@ def get(name):
     if name not in _PROVIDERS:
         raise NoCandidateError('No provider found for [{}]'.format(name))
     return _PROVIDERS[name]
-
 
 
 class Injector(object):

@@ -1,15 +1,9 @@
 # -*- encoding: utf-8 -*-
-
 """
 Tests for :mod:`syringe`.
 
 """
 import unittest
-
-try:
-    from unittest import mock
-except ImportError:
-    import mock
 
 import syringe
 
@@ -48,7 +42,7 @@ class TestProvides(unittest.TestCase):
         class CLS(object):
             pass
 
-        instance = CLS()
+        CLS()
         with self.assertRaises(syringe.DuplicateProviderError) as e:
             CLS()
         self.assertEqual('A provider for [mock] already exists',
@@ -108,7 +102,6 @@ class TestGet(unittest.TestCase):
         with self.assertRaises(syringe.NoCandidateError) as e:
             syringe.get('mock')
         self.assertEqual('No provider found for [mock]', e.exception.args[0])
-
 
 
 class TestInject(unittest.TestCase):
