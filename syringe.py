@@ -132,7 +132,7 @@ def get(name):
     Returns the provided instance.
 
     Args:
-        name: The lookup name.
+        name (str): The lookup name.
 
     Returns:
         The provided instance.
@@ -149,9 +149,19 @@ class inject(object):
 
     """
     def __init__(self, name):
+        """
+        Args:
+            name (str): The lookup name.
+
+        """
         self.name = name
 
     def __get__(self, obj, value):
+        """
+        Returns:
+            The provided instance.
+
+        """
         if obj is None:
             return self
         return get(self.name)
@@ -162,7 +172,7 @@ def mock(name, cls=None):
     Provide a mock overriding any namespace conflicts.
 
     Args:
-        name: The name of the mock to provide.
+        name (str): The name of the mock to provide.
         cls: The optional mock class to provice.
 
     """
