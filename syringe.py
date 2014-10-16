@@ -19,7 +19,6 @@ __all__ = [
     'DuplicateProviderError',
     'get',
     'inject',
-    'Injector',
     'mock',
     'provides',
     'NoCandidateError'
@@ -91,10 +90,8 @@ def get(name):
     return _PROVIDERS[name]
 
 
-class Injector(object):
+class inject(object):
     """
-    Not to be used directly. Call :func:`inject` instead.
-
     Injects the instance of a provided class to the current context.
 
     """
@@ -105,15 +102,6 @@ class Injector(object):
         if obj is None:
             return self
         return get(self.name)
-
-
-def inject(name):
-    """
-    Returns:
-        an :cls:`Injector` with the specified name.
-
-    """
-    return Injector(name)
 
 
 def mock(name, cls=None):
