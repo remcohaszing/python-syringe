@@ -167,20 +167,23 @@ class inject(object):
         return get(self.name)
 
 
-def mock(name, cls=None):
+def mock(name, m=None):
     """
     Provide a mock overriding any namespace conflicts.
 
+    If a second argument is passed, it is provided using the specified
+    name. Otherwise a new :class:`unittest.mock.Mock` instance is
+    provided.
+
     Args:
         name (str): The name of the mock to provide.
-        cls: The optional mock class to provice.
+        m: The optional object to provide as a mock.
 
     """
-    if cls is None:
-        cls = type(str(name), (mock_module.Mock,), {})
-    instance = cls()
-    _PROVIDERS[name] = instance
-    return instance
+    if m is None:
+        m = mock_module.Mock()
+    _PROVIDERS[name] = m
+    return m
 
 
 def clear():

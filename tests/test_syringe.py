@@ -175,14 +175,6 @@ class TestMock(unittest.TestCase):
             'what is the answer to life the universe and everything?')
         self.assertEqual(42, answer)
 
-    def test_class_name(self):
-        """
-        Test that the class name matches the provider name.
-
-        """
-        m = syringe.mock('mock')
-        self.assertEqual('mock', type(m).__name__)
-
     def test_mock_override(self):
         """
         Test that a mock overrides any other provided instance.
@@ -191,6 +183,19 @@ class TestMock(unittest.TestCase):
         syringe.mock('mock')
         m = syringe.mock('mock')
         self.assertIs(m, self.injected)
+
+    def test_custom_mock(self):
+        """
+        Test that a custom object can be used as a mock.
+
+        """
+        class MyMock(object):
+            pass
+
+        m = MyMock()
+        copy = syringe.mock('mymock', m)
+        self.assertIs(m, copy)
+        self.assertIs(m, syringe.get('mymock'))
 
 
 class TestClear(unittest.TestCase):
