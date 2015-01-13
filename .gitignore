@@ -1,8 +1,7 @@
-*.egg
 *.egg-info/
 *.pyc
-*.so
 __pycache__/
+/.eggs/
 /build/
 /dist/
 /docs/build/
