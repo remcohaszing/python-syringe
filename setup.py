@@ -5,15 +5,10 @@ from setuptools import setup
 
 try:
     from unittest import mock  # noqa
-except:
-    kwargs = {
-        'tests_require': 'mock',
-        'extras_require': {
-            'mock': 'mock'
-        }
-    }
+except ImportError:
+    tests_require = ['mock']
 else:
-    kwargs = {}
+    tests_require = []
 
 
 with open('README.rst') as f:
@@ -30,6 +25,9 @@ setup(
     description='A simple dependency injection library',
     long_description=readme,
     py_modules=['syringe'],
+    extras_require={
+        'mock:"2" in python_version': ['mock']
+    },
+    tests_require = tests_require,
     test_suite='tests',
-    zip_safe=True,
-    **kwargs)
+    zip_safe=True)
