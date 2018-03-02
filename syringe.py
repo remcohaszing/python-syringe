@@ -108,9 +108,11 @@ def provides(name):
 
     """
     def inner(cls):
+        cls.__provides = name
         init = cls.__init__
 
         def __init__(self, *args, **kwargs):
+            name = type(self).__provides
             if name in _PROVIDERS:
                 raise DuplicateProviderError(
                     'A provider for [{}] already exists'.format(name))
