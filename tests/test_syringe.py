@@ -68,6 +68,24 @@ class TestProvides(unittest.TestCase):
         self.assertEqual('A provider for [mock] already exists',
                          e.exception.args[0])
 
+    def test_provide_subclass_no_duplicate(self):
+        """
+        Test that a subclass is not marked as a duplicate.
+
+        """
+        @syringe.provides('A')
+        class A(object):
+            pass
+
+        @syringe.provides('B')
+        class B(A):
+            pass
+
+        a = A()
+        b = B()
+        self.assertIs(syringe.get('A'), a)
+        self.assertIs(syringe.get('B'), b)
+
 
 class TestGet(unittest.TestCase):
     """
